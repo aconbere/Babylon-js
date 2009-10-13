@@ -1,0 +1,8 @@
+# Babylon #
+
+This is a pretty straightforward port of <a href="http://github.com/julien51/babylon">Babylon</a> the ruby xmpp bot framework.
+
+## Requires ##
+
+* <a href="http://jquery.com/">JQuery</a>
+* <a href="http://code.stanziq.com/strophe/">Strophe</a>
