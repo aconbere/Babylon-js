@@ -2,6 +2,82 @@
 
 This is a pretty straightforward port of <a href="http://github.com/julien51/babylon">Babylon</a> the ruby xmpp bot framework.
 
+## Description ##
+
+As with most frmeworks the goal is seperation of concerns. You can think of Babylon as being a bit like Rails or Django for developing XMPP bots or components.
+
+## Building your App ##
+
+We start with a simple container object
+
+    HTH = {};
+
+## Routes ##
+
+One of the first things you'll want to do when designing an XMPP Bot or component is to respond to incoming XMPP stanzas. Routes provide you the means to match against stanzas and direct them to appropriate actions.
+
+To specify your routes first create a new Router object for your App.
+
+    HTH.Router = new Babylon.Router();
+
+Then declare the routes using the query and to functions.
+
+MyApp.Router.draw(function(bind){
+    bind.query('message[type="chat"]').to(HTH.MessageController, "love");
+    bind.query('presence').to(HTH.PresenceController, "presence");
+});
+
+
+## Controllers and Actions ##
+
+Controllers help construct the context by which you render views. Every incoming request instantiates a new Controller and that instance is passed along to the view.
+
+To create a new Controller we'll inject the Babylon controllers prototype into our own object. The only restriction is that your class must take a stanza argument as an initial value.
+
+    MyApp.MessageController = function(stanza) { this.stanza = stanza; }
+    MyApp.MessageController.prototype = new Babylon.Controller();
+
+now we can add new actions to our controller by assigning new functions to the prototype.
+
+    MyApp.MessageController.prototype.love = function(){
+        this.from = "romeo@capulet.com";
+        this.to = "juliette@montague.com";
+        this.message = "damn you shakespeare";
+    };
+
+This will by default call the love view, if no other view is specified.
+    
+## Views ##
+
+Views render XMPP stanzas. As such they get put on the xml stream and sent out to the server once rendered.
+
+To create a view, just attach a new function on to the Babylon.Views object.
+
+    Babylon.Views.love = function(bind) { $msg({type: "chat", to: bind.to, from: bind.from}).c("body").t(bind.message)};
+
+This will construct an xmpp message as follows
+
+    <message type="chat", to="julliette@montague.come", from="romeo@capulet.com">
+        <body>damn you shakespeare</body>
+    </body>
+
+## Models ##
+
+In babylon as with rails or django, your models provide a tool for managing state, persistence, and logic functionality.
+
+## Finishing ##
+
+Lastly you'll need to be able to run your app. This includes passing in a config and starting the Runner.
+
+    var config = { "jid": "remeo@capulette"
+                 , "password": "julietee"
+                 , "host": "http://capulette.com/http-bind/"
+                 };
+    var runner = new Babylon.Runner(MyApp.Router);
+    runner.run(config);
+
+And your bot should now connect to the running Bosh server and respond to messages.
+
 ## Requires ##
 
 * <a href="http://jquery.com/">JQuery</a>

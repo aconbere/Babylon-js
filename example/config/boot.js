@@ -1,1 +1,1 @@
-HTH = function(){};
+HTH = {};
