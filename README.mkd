@@ -22,10 +22,10 @@ To specify your routes first create a new Router object for your App.
 
 Then declare the routes using the query and to functions.
 
-MyApp.Router.draw(function(bind){
-    bind.query('message[type="chat"]').to(HTH.MessageController, "love");
-    bind.query('presence').to(HTH.PresenceController, "presence");
-});
+    MyApp.Router.draw(function(bind){
+        bind.query('message[type="chat"]').to(HTH.MessageController, "love");
+        bind.query('presence').to(HTH.PresenceController, "presence");
+    });
 
 
 ## Controllers and Actions ##
@@ -40,8 +40,8 @@ To create a new Controller we'll inject the Babylon controllers prototype into o
 now we can add new actions to our controller by assigning new functions to the prototype.
 
     MyApp.MessageController.prototype.love = function(){
-        this.from = "romeo@capulet.com";
-        this.to = "juliette@montague.com";
+        this.from = "juliet@capulet.com";
+        this.to = "romeo@montague.com";
         this.message = "damn you shakespeare";
     };
 
@@ -57,7 +57,7 @@ To create a view, just attach a new function on to the Babylon.Views object.
 
 This will construct an xmpp message as follows
 
-    <message type="chat", to="julliette@montague.come", from="romeo@capulet.com">
+    <message type="chat", from="juliet@capulet.come", to="romeo@montague.com">
         <body>damn you shakespeare</body>
     </body>
 
@@ -69,9 +69,9 @@ In babylon as with rails or django, your models provide a tool for managing stat
 
 Lastly you'll need to be able to run your app. This includes passing in a config and starting the Runner.
 
-    var config = { "jid": "remeo@capulette"
-                 , "password": "julietee"
-                 , "host": "http://capulette.com/http-bind/"
+    var config = { "jid": "juliet@capulet"
+                 , "password": "romeo"
+                 , "host": "http://capulet.com/http-bind/"
                  };
     var runner = new Babylon.Runner(MyApp.Router);
     runner.run(config);
