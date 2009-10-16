@@ -24,8 +24,8 @@ Babylon.Controller.prototype.render = function(options) {
 
 Babylon.Controller.prototype.evaluate = function(locals) {
     if(this.view) {
-        
         var that = this;
+        Babylon.log.debug("rendering " + this.action_name);
         //jQuery.extend(that, locals);
         return this.view(that);
     };

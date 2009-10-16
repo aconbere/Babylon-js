@@ -40,6 +40,7 @@ Babylon.Router.prototype.route = function(stanza) {
 
     if(routes.length >= 1){
         var route = routes[0];
+        Babylon.log.debug("routing from query: " + route.query + " to action: " + route.action);
         this.execute_route(route.controller, route.action, stanza);
     } else {
         return false;
