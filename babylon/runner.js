@@ -2,6 +2,7 @@ Babylon.Runner = function(router){
     this.observers = [];
 //    this.router = new Babylon.Router();
     this.router = router;
+    Babylon.log.debug("Starting runner");
 };
 
 Babylon.Runner.prototype.run = function(config){

@@ -5,7 +5,7 @@
 <head>
     <title>Babylon Example</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
-    <script type="text/javascript" src="../strophe.js"></script>
+    <script type="text/javascript" src="../../strophe.js"></script>
 
     <script type="text/javascript" src="../babylon/base.js"></script>
     <script type="text/javascript" src="../babylon/connection.js"></script>
@@ -20,9 +20,9 @@
     <script type="text/javascript" src="./app/controllers/hth_presence.js"></script>
     <script type="text/javascript" src="./config/routes.js"></script>
     <script type="text/javascript">
-        var config = { "jid": <insert your jid>,
-                     , "password": <insert your password>,
-                     , "host": "http://localhost/http-bind",
+        var config = { "jid": "bot@localhost"
+                     , "password": "primeros"
+                     , "host": "http://localhost/http-bind/",
                      };
         var runner = new Babylon.Runner(Example.Router);
         runner.run(config);
