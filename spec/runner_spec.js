@@ -1,64 +1,47 @@
 Screw.Unit(function() {
     describe("Babylon.Runner", function() {
+        var runner = new Object();
+        var router = new Object();
+        var observer = new Object();
+
+        before(function(){
+            router = new Babylon.Router();
+            observer = new Babylon.Observer();
+            runner = new Babylon.Runner(router, observer)
+        });
+
         describe("init", function() {
             it("should set the observer and router", function() {
-                throw "not implimented";
+                expect(runner.router).to_not(equal, null);
+                expect(runner.router).to_not(equal, undefined);
+
+                expect(runner.observer).to_not(equal, null);
+                expect(runner.observer).to_not(equal, undefined);
             });
         });
 
         describe("run", function() {
+            var host = "";
+            var jid = "";
+            var config = {};
+
+            before(function(){
+                host = "hth.com";
+                jid = "student@hth.com";
+                config = {"host": host, "jid": jid} 
+                runner.run(config)
+            });
             it("should set the config", function() {
-                throw "not implimented";
+                expect(runner.config).to(equal, config);
             });
 
             it("should intialize the connection", function() {
-                throw "not implimented";
+                expect(runner.connection).to_not(equal, null);
+                expect(runner.connection).to_not(equal, undefined);
             });
 
             it("should call connect on the connection", function() {
-                throw "not implimented";
-            });
-        });
-
-        describe("stop", function() {
-            it("should call disconnect on the connection", function() {
-                throw "not implimented";
-            });
-        });
-
-        describe("call_on_observers", function() {
-            it("should call execute_route on each observer", function() {
-                throw "not implimented";
-            });
-        });
-
-        describe("raise", function() {
-            it("should call raise on the router", function(){
-                throw "not implimented";
-            });
-        });
-
-        describe("on_connecting", function() {
-            it("should call on_connecting on the observers", function(){
-                throw "not implimented";
-            });
-        });
-
-        describe("on_connected", function() {
-            it("should call on_connected on the observers", function(){
-                throw "not implimented";
-            });
-        });
-
-        describe("on_disconnecting", function() {
-            it("should call on_disconnecting on the observers", function(){
-                throw "not implimented";
-            });
-        });
-
-        describe("on_disconnected", function() {
-            it("should call on_disconnected on the observers", function(){
-                throw "not implimented";
+                expect(runner.connection.jid).to(equal, jid);
             });
         });
     });
