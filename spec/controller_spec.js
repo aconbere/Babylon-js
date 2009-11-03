@@ -49,8 +49,8 @@ Screw.Unit(function() {
                 before(function() {
                     controller.render({view: true});
                 });
-                it("should return null", function(){
-                    expect(controller.render()).to(equal, null);
+                it("should return false", function(){
+                    expect(controller.render()).to(equal, false);
                 });
             });
             describe("when {nothing: true} is passed in", function() {
