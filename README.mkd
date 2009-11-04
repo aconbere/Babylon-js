@@ -1,6 +1,6 @@
 # Babylon #
 
-This is a pretty straightforward port of <a href="http://github.com/julien51/babylon">Babylon</a> the ruby xmpp bot framework.
+This is a pretty straightforward port of <a href="http://github.com/julien51/skates">Skates</a> the ruby xmpp bot framework.
 
 ## Description ##
 
