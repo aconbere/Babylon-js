@@ -69,11 +69,6 @@ Screw.Unit(function() {
         });
 
         describe("query", function() {
-            it("should add the query to .queries", function() {
-                router.query("test-path");
-                expect(router.queries.pop()).to(equal, "test-path");
-            });
-
             it("should return a closure that provides .to", function() {
                 var q = router.query("test-path-2");
                 expect(q.to).to_not(equal, null);
@@ -89,7 +84,7 @@ Screw.Unit(function() {
                     q = router.query("test-path-3");
                 });
 
-                it("should add a Route in routes and remove the query.", function() {
+                it("should add a Route in routes.", function() {
                     q.to(controller, action)
                     var r = router.routes.pop()
                     expect(r.accepts).to_not(equal, null);
