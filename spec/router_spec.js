@@ -145,26 +145,29 @@ Screw.Unit(function() {
             var action = "test-action";
             var action_e = "test-action-e";
             var controller_name = "test-controller";
-            var stanza = $('<div><message type="chat" to="student@hth.com" from="tutor@hth.com"><body>Hi how can I help with algebra?</body></message></div>')
+            var stanza = $msg({type: "chat", to: "student@hth.com", from: "tutor@hth.com"}).c("body").t("Hi how can I help?").toString();
+            var unmatched_stanza = $pres({type: "probe", to: "student@hth.com"}).toString();
+            var view_r = $msg({type: "chat"}).c("body").t("text");
 
             before(function(){
                 controller = function(stanza){ this.stanza = stanza, this.name = controller_name };
                 controller.prototype = new Babylon.Controller();
+                controller.prototype.name = controller_name;
                 controller.prototype[action] = function(){};
                 controller.prototype[action_e] = function(){};
 
-                Babylon.Views[controller_name] = {};
-                Babylon.Views[controller_name][action] = function(l){ return "abcde" };
-                Babylon.Views[controller_name][action_e] = function(l){ return "" };
+                Babylon.Views.add(controller_name, action, function(l){ return view_r});
+                Babylon.Views.add(controller_name, action_e, function(l){ return "" });
 
                 router.connection = {send: function(view) { this.view = view; }};
+            });
+            after(function() {
+                Babylon.Views.clear();
             });
 
             describe('route', function() {
                 var query = 'message[from="tutor@hth.com"]'
-                var stanza = '<message type="chat" to="student@hth.com" from="tutor@hth.com"><body>Hi how can I help with algebra?</body></message>';
-                var unmatched_stanza = '<pressence type="probe" to="student@hth.com"></presence>';
-
+                
                 before(function(){
                     router.query(query).to(controller, action);
                 });
@@ -172,7 +175,7 @@ Screw.Unit(function() {
                 describe("when there are matching queries", function() {
                     it("should execute the route", function() {
                         router.route(stanza);
-                        expect(router.connection.view).to(equal, "abcde");
+                        expect(router.connection.view).to(equal, view_r);
                     });
                 }); 
                 describe("where no matching queries", function() {
@@ -190,14 +193,14 @@ Screw.Unit(function() {
 
                 it("should execute_route for each listener on \"name\" with \"args\"", function() {
                     router.raise(event_name, {});
-                    expect(router.connection.view).to(equal, "abcde");
+                    expect(router.connection.view).to(equal, view_r);
                 });
             });
 
             describe('execute_route', function() {
                 it("should call the action with the object \"stanza\" and send the view", function() {
                     router.execute_route(controller, action, stanza);
-                    expect(router.connection.view).to(equal, "abcde");
+                    expect(router.connection.view).to(equal, view_r);
                 });
 
                 describe("when the action evaluates to \"\"", function() {

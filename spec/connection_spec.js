@@ -43,7 +43,7 @@ Screw.Unit(function() {
             describe("when connction is established", function(){
                 it("should send an initial presence", function(){
                     console.log(test_handler.conn.stanza);
-                    expect(test_handler.conn.stanza.tagName).to(equal, "PRESENCE");
+                    expect(test_handler.conn.stanza.tagName).to(equal, "presence");
                 });
                 it("should pass the connection object to the handler via on_connected", function(){
                     expect(test_handler.conn.connect).to_not(equal, null);

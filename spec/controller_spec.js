@@ -12,8 +12,11 @@ Screw.Unit(function() {
             controller.name = name;
             controller[action] = function(){};
 
-            Babylon.Views[name] = {}
-            Babylon.Views[name][action] = function(){ return "default view"};
+            Babylon.Views.add(name, action, function(){ return "default view"});
+        });
+
+        after(function() {
+            Babylon.Views.clear();
         });
 
         describe("perform", function() {
@@ -68,7 +71,11 @@ Screw.Unit(function() {
             describe("when {action: xxx} is passed in", function(){
                 before(function() {
                     controller["alt-action"] = function(){};
-                    Babylon.Views[name]["alt-action"] = function(){ return "abcd" };
+                    Babylon.Views.add(name, "alt-action", function(){ return "abcd" });
+                });
+
+                after(function() {
+                    Babylon.Views.clear();
                 });
 
                 it("should pass control to action xxx", function() {
