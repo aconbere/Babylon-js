@@ -98,7 +98,6 @@ Screw.Unit(function() {
             });
         });
 
-
         describe("event", function() {
             var event_name = "test-event";
 
@@ -159,7 +158,7 @@ Screw.Unit(function() {
                 Babylon.Views.add(controller_name, action, function(l){ return view_r});
                 Babylon.Views.add(controller_name, action_e, function(l){ return "" });
 
-                router.connection = {send: function(view) { this.view = view; }};
+                Babylon.Runner.connection = {send: function(view) { this.view = view; }};
             });
             after(function() {
                 Babylon.Views.clear();
@@ -175,7 +174,7 @@ Screw.Unit(function() {
                 describe("when there are matching queries", function() {
                     it("should execute the route", function() {
                         router.route(stanza);
-                        expect(router.connection.view).to(equal, view_r);
+                        expect(Babylon.Runner.connection.view).to(equal, view_r);
                     });
                 }); 
                 describe("where no matching queries", function() {
@@ -193,14 +192,14 @@ Screw.Unit(function() {
 
                 it("should execute_route for each listener on \"name\" with \"args\"", function() {
                     router.raise(event_name, {});
-                    expect(router.connection.view).to(equal, view_r);
+                    expect(Babylon.Runner.connection.view).to(equal, view_r);
                 });
             });
 
             describe('execute_route', function() {
                 it("should call the action with the object \"stanza\" and send the view", function() {
                     router.execute_route(controller, action, stanza);
-                    expect(router.connection.view).to(equal, view_r);
+                    expect(Babylon.Runner.connection.view).to(equal, view_r);
                 });
 
                 describe("when the action evaluates to \"\"", function() {

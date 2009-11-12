@@ -36,12 +36,13 @@ Screw.Unit(function() {
             });
 
             it("should intialize the connection", function() {
-                expect(runner.connection).to_not(equal, null);
-                expect(runner.connection).to_not(equal, undefined);
+                expect(Babylon.Runner.connection).to_not(equal, null);
+                expect(Babylon.Runner.connection).to_not(equal, undefined);
+                expect(Babylon.Runner.connection.host).to(equal, host);
             });
 
             it("should call connect on the connection", function() {
-                expect(runner.connection.jid).to(equal, jid);
+                expect(Babylon.Runner.connection.jid).to(equal, jid);
             });
         });
     });
