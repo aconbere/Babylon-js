@@ -65,6 +65,21 @@ This will construct an xmpp message as follows
 
 In babylon as with rails or django, your models provide a tool for managing state, persistence, and logic functionality.
 
+## User Input ##
+
+User input is handled similar to how incoming stanzas are. To catch ui events you'll add another entry to your routers draw function.
+
+    MyApp.Router.draw(function(bind){
+        bind.event('message').to(HTH.Message, "send_message");
+    });
+
+
+Then you can use the raise function on the runner, to push events up into the system.
+
+    runner.raise("message", {to: "frank@example.org", body: "Hi Frank"});
+
+This will instantiate the HTH.Message controller with the passed in object, and call the send_message action.
+
 ## Finishing ##
 
 Lastly you'll need to be able to run your app. This includes passing in a config and starting the Runner.
