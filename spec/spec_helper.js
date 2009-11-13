@@ -9,12 +9,20 @@ MockConnection.prototype.connect = function(jid, password, on_status_change){
     this.password = password;
     this.on_status_change = on_status_change;
 
-    this.status_to_connected = [Strophe.Status.CONNECTING, Strophe.Status.CONNECTED];
+    this.status_to_connected = [Strophe.Status.CONNECTING, Strophe.Status.CONNECTED, Strophe.Status.AUTHENTICATING];
 
     for(var i = 0; i < this.status_to_connected.length; i++) {
         this.on_status_change(this.status_to_connected[i]);
     }
 };
+
+MockConnection.prototype.authentication_failed = function(){
+    this.on_status_change(Strophe.Status.AUTHFAIL, "Bad password");
+}
+
+MockConnection.prototype.connection_failed = function(){
+    this.on_status_change(Strophe.Status.CONNFAIL, "TCP Error");
+}
 
 MockConnection.prototype.disconnect = function(){
     this.status_to_disconnected = [Strophe.Status.DISCONNECTING, Strophe.Status.DISCONNECTED];
@@ -35,25 +43,13 @@ MockHandler = function(){
     this.reset();
 };
 MockHandler.prototype.reset = function(s){ 
-    this._on_stanza = false;
-    this._on_connecting = false;
-    this._on_disconnecting = false;
-    this._on_disconnected = false;
-    this._on_connection_failed = false;
-    this._on_connected = false;
+  this.statuses = {};
 }, 
 MockHandler.prototype.on_stanza = function(s){ this._on_stanza = true;}, 
-MockHandler.prototype.on_connecting = function(){ this._on_connecting = true;};
-MockHandler.prototype.on_disconnecting = function(){ this._on_disconnecting = true; };
-MockHandler.prototype.on_disconnected = function(){ this._on_disconnected = true; };
-MockHandler.prototype.on_connection_failed = function(){ this._on_connection_failed = true; };
-MockHandler.prototype.on_connected = function(conn){ this.conn = conn;
-                                                     this._on_connected = true; };
+MockHandler.prototype.on_status_change = function(stat, err){ this.statuses[stat] = {status: stat, error: err} };
 
 /* This fakes being the "observer" that Babylon.Observer calls into */
-MockObserver = function(){
-    this.name = "mock_observer";
-};
+MockObserver = function(){ this.name = "mock_observer"; };
 
 Screw.Unit(function() {
     before(function() {

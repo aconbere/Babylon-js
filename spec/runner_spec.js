@@ -32,7 +32,7 @@ Screw.Unit(function() {
                 runner.run(config)
             });
             it("should set the config", function() {
-                expect(runner.config).to(equal, config);
+                expect(Babylon.config).to(equal, config);
             });
 
             it("should intialize the connection", function() {

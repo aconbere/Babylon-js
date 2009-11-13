@@ -33,21 +33,34 @@ Screw.Unit(function() {
             }); 
 
             it("should trigger connecting callback", function(){
-               expect(test_handler._on_connecting).to(equal, true); 
+                expect(test_handler.statuses["connecting"]).to(equal, {status: "connecting"}); 
             });
 
             it("should trigger connected callback", function(){
-               expect(test_handler._on_connected).to(equal, true); 
+                expect(test_handler.statuses["connected"]).to(equal, {status: "connected"}); 
             });
 
-            describe("when connction is established", function(){
-                it("should send an initial presence", function(){
-                    console.log(test_handler.conn.stanza);
-                    expect(test_handler.conn.stanza.tagName).to(equal, "presence");
+            it("should trigger authenticating callback", function(){
+                expect(test_handler.statuses["authenticating"]).to(equal, {status: "authenticating"}); 
+            });
+
+            describe("when connection fails", function(){
+                it("should trigger connection_failed callback", function(){
+                    connection.connection.connection_failed();
+                    expect(test_handler.statuses["connection_failed"]).to(equal, {status: "connection_failed", error: "TCP Error"}); 
                 });
-                it("should pass the connection object to the handler via on_connected", function(){
-                    expect(test_handler.conn.connect).to_not(equal, null);
-                    expect(test_handler.conn.connect).to_not(equal, undefined);
+            });
+
+            describe("when authentication fails", function(){
+                it("should trigger authentication_failed callback", function(){
+                    connection.connection.authentication_failed();
+                    expect(test_handler.statuses["authentication_failed"]).to(equal, {status: "authentication_failed", error: "Bad password"}); 
+                });
+            });
+
+            describe("when connection is established", function(){
+                it("should send an initial presence", function(){
+                    expect(connection.connection.stanza.nodeName).to(equal, "presence");
                 });
                 it("should set connected to true", function(){
                     expect(connection.connected).to(equal, true);
@@ -67,11 +80,11 @@ Screw.Unit(function() {
             });
 
             it("should trigger the disconnecting callback", function(){
-                expect(test_handler._on_disconnecting).to(equal, true);
+               expect(test_handler.statuses["disconnecting"]).to(equal, {status: "disconnecting"}); 
             });
 
             it("should trigger the disconnected callback", function(){
-                expect(test_handler._on_disconnected).to(equal, true);
+               expect(test_handler.statuses["disconnected"]).to(equal, {status: "disconnected"}); 
             });
         });
     });
