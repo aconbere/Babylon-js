@@ -1,8 +1,6 @@
-Example.PresenceController = function(stanza) {
-    this.stanza = stanza;
-}
-
+Example.PresenceController = function(stanza) { this.stanza = stanza; }
 Example.PresenceController.prototype = new Babylon.Controller();
+Example.PresenceController.prototype.name = "presence_controller";
 
 Example.PresenceController.prototype.message = function() {
     this.from = "bot@localhost";
