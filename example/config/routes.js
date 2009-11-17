@@ -1,6 +1,7 @@
-Example.Router = new Babylon.Router();
-Example.Router.draw(function(bind){
-    bind.query('message').to(Example.PresenceController, "message");
-    bind.query('iq').to(Example.PresenceController, "iq");
-    bind.query('presence').to(Example.PresenceController, "presence");
-});
+Chatter.Init.Routes = function() {
+  Chatter.Router = new Babylon.Router();
+  Chatter.Router.draw(function(bind){
+    bind.query('presence').to(Chatter.Roster, "presence");
+    bind.query('iq[type="result"] query[xmlns="jabber:iq"roster"]').to(Chatter.Roster, "roster");
+  });
+};

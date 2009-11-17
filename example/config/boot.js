@@ -1,1 +1,2 @@
-Example = {};
+Chatter = {};
+Chatter.Init = {};
