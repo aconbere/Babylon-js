@@ -68,6 +68,41 @@ Screw.Unit(function() {
             });
         });
 
+        describe("read_cookie", function() {
+            before(function() {
+                document.cookie = "babylon=a,b,c";
+            });
+
+            it("should read in the cookie and split it's contents into jid, sid and rid", function() {
+                var cookie = connection.read_cookie();
+                expect(cookie.jid).to(equal, "a");
+                expect(cookie.sid).to(equal, "b");
+                expect(cookie.rid).to(equal, "c");
+            });
+        });
+
+        describe("write_cookie", function() {
+            before(function() {
+                connection.connect(jid, password);
+                connection.connection.sid = "sid_1";
+                connection.connection.rid = "rid_1";
+                connection.write_cookie();
+            });
+
+            it("should write the jid, sid and rid to the cookie named \"babylon\"", function() {
+                var cookie = connection.read_cookie();
+                expect(cookie.jid).to(equal, jid); 
+                expect(cookie.sid).to(equal, "sid_1"); 
+                expect(cookie.rid).to(equal, "rid_1"); 
+            });
+        });
+
+        describe("reattach", function() {
+          it("should be tested", function() {
+            expect(true).to(equal, false);
+          });
+        });
+
         describe("disconnect", function() {
             before(function(){
                 test_handler.reset(); 
