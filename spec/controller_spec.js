@@ -48,6 +48,7 @@ Screw.Unit(function() {
                 controller.name = name;
                 controller[action] = function(){};
             });
+
             describe("when render has been called once before", function() {
                 before(function() {
                     controller.render({view: true});
@@ -56,9 +57,11 @@ Screw.Unit(function() {
                     expect(controller.render()).to(equal, false);
                 });
             });
+
             describe("when {nothing: true} is passed in", function() {
                 it("should set this.view to a callable that returns \"\"", function(){
-                    expect(controller.render({nothing: true})()).to(equal, "");
+                    controller.render({nothing: true})
+                    expect(controller.view({})).to(equal, "");
                 });
             });
 
