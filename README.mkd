@@ -4,7 +4,11 @@ This is a pretty straightforward port of <a href="http://github.com/julien51/ska
 
 ## Description ##
 
-As with most frmeworks the goal is seperation of concerns. You can think of Babylon as being a bit like Rails or Django for developing XMPP bots or components.
+As with most frameworks the goal is seperation of concerns. You can think of Babylon as being a bit like Rails or Django for developing XMPP bots or components. A request comes in either from the XML Stream (XMPP) or as a user event, and it routed to controller action pairs. Controllers and actions generate XML that they publish back onto the XML Stream. Everything else is just icing.
+
+### Thanks ###
+
+A big thanks to the people at <a href="http://jivatechnology.com/">Jiva Technology</a> who funded the development of this library. Julien Genestoux from <a href="http://superfeedr.com/">Superfeedr</a> for dealing with all my questions about Skates, and many others.
 
 ## Building your App ##
 
