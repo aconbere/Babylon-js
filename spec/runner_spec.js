@@ -47,13 +47,29 @@ Screw.Unit(function() {
       });
     });
     
-    describe("run with cookie", function() {
+    describe("run with and without cookie reattach", function() {
       
-      it("should call reattach when a cookie exists", function(){
+      it("should call reattach when a cookie exists and attach option passed", function(){
         var mock = new Mock(Babylon.Connection.prototype);
         Babylon.Connection.prototype.expects("read_cookie").returns({jid: "jid", sid: "sid", rid: "rid"});
         Babylon.Connection.prototype.expects("reattach");
         runner.run({"host": "hth.com", "jid": "student@hth.com", "attach": true});
+        expect(Babylon.Connection.prototype).to(verify_to, true);
+      });
+      
+      it("should not call reattach when a cookie exists but attach option not passed", function(){
+        var mock = new Mock(Babylon.Connection.prototype);
+        Babylon.Connection.prototype.expects("read_cookie").returns({jid: "jid", sid: "sid", rid: "rid"});
+        Babylon.Connection.prototype.expects("reattach").never();
+        runner.run({"host": "hth.com", "jid": "student@hth.com"});
+        expect(Babylon.Connection.prototype).to(verify_to, true);
+      });
+      
+      it("should not call reattach when a cookie does not exists and attach option passed", function(){
+        var mock = new Mock(Babylon.Connection.prototype);
+        Babylon.Connection.prototype.expects("read_cookie").returns("");
+        Babylon.Connection.prototype.expects("reattach").never();
+        runner.run({"host": "hth.com", "jid": "student@hth.com"});
         expect(Babylon.Connection.prototype).to(verify_to, true);
       });
     });
