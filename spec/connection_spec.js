@@ -124,9 +124,7 @@ Screw.Unit(function() {
 
 
         describe("reattach", function() {
-          it("should be tested", function() {
-            expect(true).to(equal, false);
-          });
+          // tested in runner to give a more full stack test
         });
 
 
