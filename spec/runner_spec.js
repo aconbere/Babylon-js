@@ -20,16 +20,25 @@ Screw.Unit(function() {
       });
     });
 
-    describe("run", function() {
+    describe("connect", function() {
       var host = "";
       var jid = "";
       var config = {};
 
       before(function(){
+        var mock = new Mock(Babylon.Connection.prototype);
+        Babylon.Connection.prototype.stubs("register_cookie_callback");
         host = "hth.com";
         jid = "student@hth.com";
         config = {"host": host, "jid": jid};
-        runner.run(config);
+        runner.set_config(config);
+        runner.connect(jid, "password");
+      });
+
+      after(function(){
+        if(Babylon.Connection.prototype.jsmocha){
+          Babylon.Connection.prototype.jsmocha.teardown();
+        }
       });
       
       it("should set the config", function() {
@@ -53,7 +62,8 @@ Screw.Unit(function() {
         var mock = new Mock(Babylon.Connection.prototype);
         Babylon.Connection.prototype.expects("read_cookie").returns({jid: "jid", sid: "sid", rid: "rid"});
         Babylon.Connection.prototype.expects("reattach");
-        runner.run({"host": "hth.com", "jid": "student@hth.com", "attach": true});
+        runner.set_config({"host": "hth.com", "jid": "student@hth.com", "attach": true});
+        runner.run();
         expect(Babylon.Connection.prototype).to(verify_to, true);
       });
       
@@ -61,7 +71,8 @@ Screw.Unit(function() {
         var mock = new Mock(Babylon.Connection.prototype);
         Babylon.Connection.prototype.expects("read_cookie").returns({jid: "jid", sid: "sid", rid: "rid"});
         Babylon.Connection.prototype.expects("reattach").never();
-        runner.run({"host": "hth.com", "jid": "student@hth.com"});
+        runner.set_config({"host": "hth.com", "jid": "student@hth.com"});
+        runner.run();
         expect(Babylon.Connection.prototype).to(verify_to, true);
       });
       
@@ -69,7 +80,8 @@ Screw.Unit(function() {
         var mock = new Mock(Babylon.Connection.prototype);
         Babylon.Connection.prototype.expects("read_cookie").returns("");
         Babylon.Connection.prototype.expects("reattach").never();
-        runner.run({"host": "hth.com", "jid": "student@hth.com"});
+        runner.set_config({"host": "hth.com", "jid": "student@hth.com"});
+        runner.run();
         expect(Babylon.Connection.prototype).to(verify_to, true);
       });
       
@@ -77,10 +89,14 @@ Screw.Unit(function() {
         var mock = new Mock(Babylon.Connection.prototype);
         var mock = new Mock(Strophe.Connection.prototype);
         
-        Babylon.Connection.prototype.expects("read_cookie").twice().returns({jid: "jid", sid: "sid", rid: "rid"});
-        Strophe.Connection.prototype.expects("attach").passing("jid", "sid", "rid", Babylon.Connection.prototype.on_connect);
+        Babylon.Connection.prototype.stubs("register_cookie_callback");
+        Babylon.Connection.prototype.expects("read_cookie").twice().returns({jid: "123", sid: "456", rid: "789"});
+        Strophe.Connection.prototype.expects("attach").passing(function(args){
+          return args[0] == "123" && args[1] == "456" && args[2] == "789" ? true : false;
+        });
         
-        runner.run({ "host": "hth.com", "jid": "student@hth.com", "attach": true });
+        runner.set_config({ "host": "hth.com", "jid": "student@hth.com", "attach": true });
+        runner.run();
         
         expect(Babylon.Connection.prototype).to(verify_to, true);
         expect(Strophe.Connection.prototype).to(verify_to, true);

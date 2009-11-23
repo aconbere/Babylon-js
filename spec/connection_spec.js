@@ -8,12 +8,14 @@ Screw.Unit(function() {
         Strophe.Connection = MockConnection;
 
         before(function(){
-            test_handler = new MockHandler();
-            connection = new Babylon.Connection(test_host, test_handler);
+          $.cookie('babylon', null);
+          test_handler = new MockHandler();
+          connection = new Babylon.Connection(test_host, test_handler);
         });
         
         after(function(){
           test_handler.reset();
+          $.cookie('babylon', null);
         });
 
 
@@ -29,7 +31,13 @@ Screw.Unit(function() {
 
         describe("connect", function() {
             before(function(){
-                connection.connect(jid, password);
+              var mock = new Mock(Babylon.Connection.prototype);
+              Babylon.Connection.prototype.stubs("register_cookie_callback");
+              connection.connect(jid, password);
+            });
+            
+            after(function(){
+              Babylon.Connection.prototype.jsmocha.teardown();
             });
 
             it("should set the jid and password", function(){
@@ -76,9 +84,37 @@ Screw.Unit(function() {
         
         describe("using cookies to reconnect to existing session", function() {
           
+          before(function(){
+            var mock = new Mock(Babylon.Connection.prototype);
+            Babylon.Connection.prototype.stubs("register_cookie_callback");
+          });
+          
+          after(function(){
+            if(Babylon.Connection.prototype.jsmocha){
+              Babylon.Connection.prototype.jsmocha.teardown();
+            }
+          });
+          
+          
+          it("should set the callback to write the cookie on page unload", function(){
+            // var mock = new Mock(Babylon.Connection.prototype);
+            Babylon.Connection.prototype.expects("register_cookie_callback");
+            connection.on_connect(Strophe.Status.CONNECTED);
+            expect(Babylon.Connection.prototype).to(verify_to, true);
+          });
+          
+          it("should delete the cookie on disconnect", function(){
+            // var mock = new Mock(Babylon.Connection.prototype);
+            Babylon.Connection.prototype.expects("erase_cookie");
+            connection.connect(jid, password, Babylon.Connection.on_connect);
+            connection.disconnect();
+            expect(Babylon.Connection.prototype).to(verify_to, true);
+          });
+          
+          
           describe("read_cookie", function() {
               before(function() {
-                  document.cookie = "babylon=a,b,c";
+                document.cookie = "babylon=a,b,c";
               });
 
               it("should read in the cookie and split it's contents into jid, sid and rid", function() {
@@ -92,33 +128,18 @@ Screw.Unit(function() {
 
           describe("write_cookie", function() {
               before(function() {
-                  connection.connect(jid, password);
-                  connection.connection.sid = "sid_1";
-                  connection.connection.rid = "rid_1";
-                  connection.write_cookie();
+                connection.connect(jid, password);
+                connection.connection.sid = "sid_1";
+                connection.connection.rid = "rid_1";
+                connection.write_cookie();
               });
 
               it("should write the jid, sid and rid to the cookie named \"babylon\"", function() {
-                  var cookie = connection.read_cookie();
-                  expect(cookie.jid).to(equal, jid); 
-                  expect(cookie.sid).to(equal, "sid_1"); 
-                  expect(cookie.rid).to(equal, "rid_1"); 
+                var cookie = connection.read_cookie();
+                expect(cookie.jid).to(equal, jid);
+                expect(cookie.sid).to(equal, "sid_1"); 
+                expect(cookie.rid).to(equal, "rid_1"); 
               });
-          });
-          
-          it("should create the cookie on connect", function(){
-            var mock = new Mock(Babylon.Connection.prototype);
-            Babylon.Connection.prototype.expects("write_cookie");
-            connection.connect(jid, password, Babylon.Connection.on_connect);
-            expect(Babylon.Connection.prototype).to(verify_to, true);
-          });
-          
-          it("should delete the cookie on disconnect", function(){
-            var mock = new Mock(Babylon.Connection.prototype);
-            Babylon.Connection.prototype.expects("erase_cookie");
-            connection.connect(jid, password, Babylon.Connection.on_connect);
-            connection.disconnect();
-            expect(Babylon.Connection.prototype).to(verify_to, true);
           });
         });
 
@@ -129,9 +150,18 @@ Screw.Unit(function() {
 
 
         describe("disconnect", function() {
+            
             before(function(){
-                connection.connect(jid, password);
-                connection.disconnect();
+              var mock = new Mock(Babylon.Connection.prototype);
+              Babylon.Connection.prototype.stubs("register_cookie_callback");
+              connection.connect(jid, password);
+              connection.disconnect();
+            });
+
+            after(function(){
+              if(Babylon.Connection.prototype.jsmocha){
+                Babylon.Connection.prototype.jsmocha.teardown();
+              }
             });
 
             it("should set connected to false", function(){
