@@ -97,14 +97,13 @@ Screw.Unit(function() {
           
           
           it("should set the callback to write the cookie on page unload", function(){
-            // var mock = new Mock(Babylon.Connection.prototype);
             Babylon.Connection.prototype.expects("register_cookie_callback");
+            Babylon.Connection.prototype.expects("register_for_all_messages");
             connection.on_connect(Strophe.Status.CONNECTED);
             expect(Babylon.Connection.prototype).to(verify_to, true);
           });
           
           it("should delete the cookie on disconnect", function(){
-            // var mock = new Mock(Babylon.Connection.prototype);
             Babylon.Connection.prototype.expects("erase_cookie");
             connection.connect(jid, password, Babylon.Connection.on_connect);
             connection.disconnect();
