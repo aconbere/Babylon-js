@@ -21,9 +21,9 @@ Screw.Unit(function() {
     });
 
     describe("connect", function() {
-      var host = "";
-      var jid = "";
-      var config = {};
+      var host;
+      var jid;
+      var config;
 
       before(function(){
         var mock = new Mock(Babylon.Connection.prototype);
@@ -32,7 +32,6 @@ Screw.Unit(function() {
         jid = "student@hth.com";
         config = {"host": host, "jid": jid};
         runner.set_config(config);
-        runner.connect(jid, "password");
       });
 
       after(function(){
@@ -42,17 +41,37 @@ Screw.Unit(function() {
       });
       
       it("should set the config", function() {
+        runner.connect(jid, "password");
         expect(Babylon.config).to(equal, config);
       });
 
       it("should intialize the connection", function() {
+        runner.connect(jid, "password");
         expect(Babylon.Runner.connection).to_not(equal, null);
         expect(Babylon.Runner.connection).to_not(equal, undefined);
         expect(Babylon.Runner.connection.host).to(equal, host);
       });
 
       it("should call connect on the connection", function() {
-        expect(Babylon.Runner.connection.jid).to(equal, jid);
+        Babylon.Connection.prototype.expects("connect");
+        runner.connect(jid, "password");
+        expect(Babylon.Connection.prototype).to(verify_to, true);
+      });
+      
+      it("should not call connect when it can attach to an existing session", function() {
+        var r_mock = new Mock(Babylon.Runner.prototype);
+        Babylon.Runner.prototype.expects("should_reattach").returns(true);
+        Babylon.Connection.prototype.expects("connect").never();
+        runner.connect(jid, "password", true);
+        expect(Babylon.Connection.prototype).to(verify_to, true);
+        expect(Babylon.Runner.prototype).to(verify_to, true);
+      });
+      
+      it("should connect when it can attach to an existing session but the reattach_check flag not passed", function() {
+        var r_mock = new Mock(Babylon.Runner.prototype);
+        Babylon.Connection.prototype.expects("connect");
+        runner.connect(jid, "password");
+        expect(Babylon.Connection.prototype).to(verify_to, true);
       });
     });
     
