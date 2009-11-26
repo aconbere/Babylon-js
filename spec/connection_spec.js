@@ -86,6 +86,7 @@ Screw.Unit(function() {
     describe("using cookies to reconnect to existing session", function() {
       
       before(function(){
+        Babylon.config = {};
         var mock = new Mock(Babylon.Connection.prototype);
         Babylon.Connection.prototype.stubs("register_cookie_callback");
       });
@@ -106,8 +107,7 @@ Screw.Unit(function() {
       
       it("should delete the cookie on disconnect", function(){
         Babylon.Connection.prototype.expects("erase_cookie");
-        connection.connect(jid, password, Babylon.Connection.on_connect);
-        connection.disconnect();
+        connection.on_connect(Strophe.Status.DISCONNECTED);
         expect(Babylon.Connection.prototype).to(verify_to, true);
       });
       
