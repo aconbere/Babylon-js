@@ -168,6 +168,24 @@ Screw.Unit(function() {
         expect(connection.connected).to(equal, false);
       });
 
+      it("should delete the cookie", function(){
+        Babylon.Connection.prototype.expects("erase_cookie");
+        connection.on_connect(Strophe.Status.DISCONNECTED);
+        expect(Babylon.Connection.prototype).to(verify_to, true);
+      });
+
+     it("should unregister the cookie callback", function(){
+        Babylon.Connection.prototype.expects("unregister_cookie_callback");
+        connection.on_connect(Strophe.Status.DISCONNECTED);
+        expect(Babylon.Connection.prototype).to(verify_to, true);
+      });
+
+     it("should set config.reconnect to false",function (){
+          expect(Babylon.config.reconnect).to(equal,false);
+      });
+
+
+
       it("should trigger the disconnecting callback", function(){
          expect(test_handler.statuses.disconnecting).to(equal, {status: "disconnecting"}); 
       });
