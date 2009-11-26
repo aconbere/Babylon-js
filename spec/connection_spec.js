@@ -4,12 +4,11 @@ Screw.Unit(function() {
     var test_host = "test_host";
     var jid = "student@hth.com";
     var password = "password";
-    var connection = {};
-    var test_handler = {};
+    var connection;
+    var test_handler;
     Strophe.Connection = MockConnection;
 
     before(function(){
-      $.cookie('babylon', null);
       test_handler = new MockHandler();
       connection = new Babylon.Connection(test_host, test_handler);
     });
