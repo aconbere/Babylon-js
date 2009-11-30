@@ -6,6 +6,7 @@ Screw.Unit(function() {
     var password = "password";
     var connection;
     var test_handler;
+
     Strophe.Connection = MockConnection;
 
     before(function(){
