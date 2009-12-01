@@ -27,4 +27,3 @@ Babylon.Views.add("roster", "add", function(bind) {
   });
 });
 
-

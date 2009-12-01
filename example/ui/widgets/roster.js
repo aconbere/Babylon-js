@@ -1,0 +1,1 @@
+Chatter.RosterWidget = function() {};

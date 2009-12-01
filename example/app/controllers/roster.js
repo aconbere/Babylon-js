@@ -1,9 +1,9 @@
 Chatter.Roster = function(stanza) { this.stanza = stanza; }
-Chatter.Roster.prototype = new Babylon.();
+Chatter.Roster.prototype = new Babylon.Controller();
 Chatter.Roster.prototype.name = "roster";
 
 Chatter.Roster.prototype.on_connected = function() {
-  this.from = Babylon.config["jid"];
+  this.from = Babylon.config["full_jid"];
 };
 
 Chatter.Roster.prototype.roster = function() {
@@ -12,19 +12,19 @@ Chatter.Roster.prototype.roster = function() {
     $.publish("roster_item", [this.stanza.items[i]]);
   }
   this.render({nothing: true});
-}
+};
 
 Chatter.Roster.prototype.add = function() {
   this.from = this.stanza.from;
   this.jid = this.stanza.jid;
   this.name = this.stanza.name;
   this.group = this.stanza.group;
-}
+};
 
 Chatter.Roster.prototype.remove = function() {
   this.from = this.stanza.from;
   this.jid = this.stanza.jid;
-}
+};
 
 Chatter.Roster.prototype.presence = function() {
   $.publish("roster_item", [roster_item]);

@@ -4,3 +4,6 @@
 [submodule "vendor/screw-unit"]
 	path = vendor/screw-unit
 	url = git://github.com/nkallen/screw-unit.git
+[submodule "vendor/xml-builder"]
+	path = vendor/xml-builder
+	url = git://github.com:aconbere/xml-builder.git
