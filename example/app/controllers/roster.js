@@ -27,5 +27,6 @@ Chatter.Roster.prototype.remove = function() {
 };
 
 Chatter.Roster.prototype.presence = function() {
-  $.publish("roster_item", [roster_item]);
+  $.publish("presence", [{"user": this.stanza.from, "status": this.stanza.status}]);
+  this.render({nothing: true});
 };
