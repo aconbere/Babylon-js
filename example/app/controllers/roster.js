@@ -27,6 +27,8 @@ Chatter.Roster.prototype.remove = function() {
 };
 
 Chatter.Roster.prototype.presence = function() {
-  $.publish("presence", [{"user": this.stanza.from, "status": this.stanza.status}]);
+  if(Babylon.get_bare_jid(this.stanza.from) != Babylon.get_bare_jid(Babylon.config.jid)) {
+    $.publish("presence", [{"jid": this.stanza.from, "status": this.stanza.status}]);
+  }
   this.render({nothing: true});
 };

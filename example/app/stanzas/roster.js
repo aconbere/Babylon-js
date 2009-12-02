@@ -9,7 +9,7 @@ Babylon.Stanza.add("roster", "roster", function(stanza) {
     roster_item.name = item.attr("name");
     roster_item.subscription = item.attr("subscription");
     roster_item.group = item.find("group").text();
-    roster_item.status = "online";
+    roster_item.status = "offline";
     return roster_item
   });
   return s;
