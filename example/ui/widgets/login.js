@@ -1,12 +1,27 @@
-Chatter.LoginWidget = function() {
-  $("#login").submit(function() {
-    var jid = $("#login #username").val();
-    var password = $("#login #password").val();
-    Chatter.runner.run(jid, password);
-    return false;
-  });
+Chatter.LoginWidget = function(point) {
+  this.point = $(point);
+};
 
-  $("#logout_form").submit(function(){
-    Chatter.runner.stop();
+Chatter.LoginWidget.prototype.set_connect = function() {
+  var that = this;
+  $("#login").submit(function() {
+    that.connect();
   });
+};
+
+Chatter.LoginWidget.prototype.connect = function() {
+  var jid = this.point.find("#username").val();
+  var password = this.point.find("#password").val();
+  Chatter.runner.run(jid, password);
+  return false;
+};
+
+Chatter.LoginWidget.prototype.set_disconnect = function() {
+  $("#logout_form").submit(function(){
+    that._disconnect();
+  });
+};
+
+Chatter.LoginWidget.prototype.disconnect = function() {
+  Chatter.runner.stop();
 };

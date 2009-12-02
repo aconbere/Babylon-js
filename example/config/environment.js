@@ -5,7 +5,7 @@ Chatter.Init.environment = function(){
 
   Chatter.runner = new Babylon.Runner(Chatter.Router, Chatter.Observer, Chatter.config);
   
-  Chatter.LoginWidget();
-  Chatter.StatusWidget();
-  Chatter.RosterWidget();
+  var login_widget = new Chatter.LoginWidget("#login");
+  var status_widget = new Chatter.StatusWidget("#status", "#error");
+  var roster_widget = new Chatter.RosterWidget("#roster");
 };

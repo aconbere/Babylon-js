@@ -10,5 +10,4 @@ Chatter.Init.Observers = function() {
   Chatter.Observer.add_connection_observer("on_connected", Chatter.Status);
   Chatter.Observer.add_connection_observer("on_disconnecting", Chatter.Status);
   Chatter.Observer.add_connection_observer("on_disconnected", Chatter.Status);
-
 };
